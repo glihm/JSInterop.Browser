@@ -1,0 +1,103 @@
+﻿@using System.Text;
+
+@using JSInterop.Browser.Testing
+@using JSInterop.Browser.WebApis.WebCrypto
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.SHA;
+
+@inject Crypto _crypto
+
+<div id="main">
+
+    <UnitTest TestName="Digest SHA1"
+              MethodToBeTested="@this._digestSHA1" />
+
+    <UnitTest TestName="Digest SHA256"
+              MethodToBeTested="@this._digestSHA256" />
+
+    <UnitTest TestName="Digest SHA384"
+              MethodToBeTested="@this._digestSHA384" />
+
+    <UnitTest TestName="Digest SHA512"
+              MethodToBeTested="@this._digestSHA512" />
+</div>
+
+
+@code {
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public UWebCryptoSubtleDigest()
+    {
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _digestSHA1()
+    {
+        byte[] data = Encoding.UTF8.GetBytes("hey sha");
+        byte[]? digest = await this._crypto.Subtle.Digest(ShaAlgorithm.SHA1, data);
+        if (digest is null)
+        {
+            return false;
+        }
+
+        return Convert.ToBase64String(digest) == "Sn6JMthcxfSRSxeYhrWY8lzHIEs=";
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _digestSHA256()
+    {
+        byte[] data = Encoding.UTF8.GetBytes("hey sha");
+        byte[]? digest = await this._crypto.Subtle.Digest(ShaAlgorithm.SHA256, data);
+        if (digest is null)
+        {
+            return false;
+        }
+
+        return Convert.ToBase64String(digest) == "9fvME4iAAxY1YrUFibeRhqekSrUEAT8G8TGbphAokEg=";
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _digestSHA384()
+    {
+        byte[] data = Encoding.UTF8.GetBytes("hey sha");
+        byte[]? digest = await this._crypto.Subtle.Digest(ShaAlgorithm.SHA384, data);
+        if (digest is null)
+        {
+            return false;
+        }
+
+        return Convert.ToBase64String(digest) == "K9dNtIMaWOQ8uUafqsQAQZ1+v70fP857qqm1fWLXRJgM8/ZaSNGuDQ3cZmVBvSKA";
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _digestSHA512()
+    {
+        byte[] data = Encoding.UTF8.GetBytes("hey sha");
+        byte[]? digest = await this._crypto.Subtle.Digest(ShaAlgorithm.SHA512, data);
+        if (digest is null)
+        {
+            return false;
+        }
+
+        return Convert.ToBase64String(digest) == "3NSErawYVx75QeBZxGUbjZAqKmD3lKOByCxhVc9x2HPdM7m3QL15IMtSZYiwCuVV8Y3Nf2hnNiv74LuOa8sijA==";
+    }
+}

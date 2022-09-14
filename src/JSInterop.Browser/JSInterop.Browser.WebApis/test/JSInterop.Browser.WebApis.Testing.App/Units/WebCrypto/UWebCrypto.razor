@@ -1,0 +1,64 @@
+﻿@using JSInterop.Browser.Testing
+@using JSInterop.Browser.WebApis.WebCrypto
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.AES;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.RSA;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.EC;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.HMAC;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.SHA;
+
+@inject Crypto _crypto
+
+<div id="main">
+
+    <UnitTest TestName="getRandomValues"
+              MethodToBeTested="@this._getRandomValues" />
+
+    <UnitTest TestName="randomUUID"
+              MethodToBeTested="@this._randomUUID" />
+
+</div>
+
+
+@code {
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public UWebCrypto()
+    {
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _getRandomValues()
+    {
+        byte[] vals = new byte[200];
+        await this._crypto.GetRandomValues(vals);
+
+        // TODO: how to test randomness?
+        int sum = 0;
+        for (int i = 0; i < vals.Length; i++)
+        {
+            sum += vals[i];
+        }
+
+        return sum > 0;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _randomUUID()
+    {
+        Guid guid = await this._crypto.RandomUUID();
+        return guid != Guid.Empty;
+    }
+
+}

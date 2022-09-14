@@ -1,0 +1,91 @@
+﻿
+<div id="main">
+
+
+    <p id="test-name">@this.TestName</p>
+
+    @if (this._isRunning)
+    {
+        <div class="test-spinner spinner-border"
+            role="status">
+        </div>
+    }
+    else
+    {
+        <p id="test-result"
+           class="@this._css">@this._resultText</p>
+    }
+</div>
+
+
+@code {
+
+    /// <summary>
+    /// Test's name.
+    /// </summary>
+    [Parameter]
+    public string TestName { get; set; }
+
+    /// <summary>
+    /// Method to be tested.
+    /// </summary>
+    [Parameter]
+    public Func<Task<bool>>? MethodToBeTested { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private string _resultText;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private string _css;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private bool _isRunning;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public UnitTest()
+    {
+        this.TestName = "No test's name";
+        this._resultText = "Not started";
+        this._css = "";
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task
+    OnParametersSetAsync()
+    {
+        if (this.MethodToBeTested is not null)
+        {
+            this._isRunning = true;
+
+            bool isSuccess = await this.MethodToBeTested();
+            this._defineResultUI(isSuccess);
+
+            this._isRunning = false;
+        }
+
+        await base.OnParametersSetAsync();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isSuccess"></param>
+    private void
+    _defineResultUI(bool isSuccess)
+    {
+        this._resultText = isSuccess ? "Passed" : "Failed";
+        this._css = isSuccess ? "success" : "error";
+    }
+}

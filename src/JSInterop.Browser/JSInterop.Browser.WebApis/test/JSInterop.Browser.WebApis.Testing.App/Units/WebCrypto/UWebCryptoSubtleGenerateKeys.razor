@@ -1,0 +1,131 @@
+﻿@using JSInterop.Browser.Testing
+@using JSInterop.Browser.WebApis.WebCrypto
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.AES;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.RSA;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.EC;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.HMAC;
+@using JSInterop.Browser.WebApis.WebCrypto.Subtle.SHA;
+
+@inject Crypto _crypto
+
+<div id="main">
+
+    <UnitTest TestName="generateKeys (AES)"
+              MethodToBeTested="@this._generateKeysAES" />
+
+    <UnitTest TestName="generateKeys (HMAC)"
+              MethodToBeTested="@this._generateKeysHMAC" />
+
+    <UnitTest TestName="generateKeys (RSA)"
+              MethodToBeTested="@this._generateKeysRSA" />
+
+    <UnitTest TestName="generateKeys (EC)"
+              MethodToBeTested="@this._generateKeysEC" />
+
+</div>
+
+
+@code {
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public UWebCryptoSubtleGenerateKeys()
+    {
+
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _generateKeysAES()
+    {
+        AesKeyGenParams algo = new(AesAlgorithms.AES_GCM, 256);
+
+        CryptoKey<AesKeyGenParams>? ck =
+            await this._crypto.Subtle.GenerateKeySymmetric<AesKeyGenParams>(
+                algo,
+                CryptoKeyUsage.Encrypt | CryptoKeyUsage.Decrypt);
+
+        if (ck is null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _generateKeysRSA()
+    {
+        RsaHashedKeyGenParams algo = new(RsaAlgorithms.RSA_OAEP, 2048, ShaAlgorithm.SHA256);
+
+        CryptoKeyPair<RsaHashedKeyGenParams>? ck =
+            await this._crypto.Subtle.GenerateKeyAsymmetric<RsaHashedKeyGenParams>(
+                algo,
+                CryptoKeyUsage.Encrypt | CryptoKeyUsage.Decrypt);
+
+        if (ck is null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _generateKeysEC()
+    {
+        EcKeyGenParams algo = new(EcAlgorithms.ECDSA, EcNamedCurves.P_521);
+
+        CryptoKeyPair<EcKeyGenParams>? ck =
+            await this._crypto.Subtle.GenerateKeyAsymmetric<EcKeyGenParams>(
+                algo,
+                CryptoKeyUsage.Sign | CryptoKeyUsage.Verify);
+
+        if (ck is null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task<bool>
+    _generateKeysHMAC()
+    {
+        HmacKeyGenParams algo = new(ShaAlgorithm.SHA512);
+
+        CryptoKey<HmacKeyGenParams>? ck =
+            await this._crypto.Subtle.GenerateKeySymmetric<HmacKeyGenParams>(
+                algo,
+                CryptoKeyUsage.Sign | CryptoKeyUsage.Verify);
+
+        if (ck is null)
+        {
+            return false;
+        }
+
+        if (ck.Algorithm.Hash != ShaAlgorithm.SHA512)
+        {
+            return false;
+        }
+        return true;
+    }
+
+}
