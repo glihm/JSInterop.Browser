@@ -4,7 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	  <RootNamespace>JSInterop.Browser</RootNamespace>
+	<RootNamespace>JSInterop.Browser</RootNamespace>
+	<Version>0.0.1</Version>
   </PropertyGroup>
 
 
