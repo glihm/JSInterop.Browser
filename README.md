@@ -10,4 +10,4 @@ The idea is to:
 * Implement low level interop code into `JSInterop.Browser.WebApis`.
 * Implement a higher level of abstraction (for cryptography to start) in `JSInterop.Browser.Cryptography` where a C# developper will not have to care about JSInterop. With the idea I have in mind, using DI, a C# developper will be able to do `this.aesGCMBrowser.Encrypt(key, data)` using an injected `aesGCMBrowser`, which will abstract the all JSInterop process.
 
-Work **actively** in progress... Only on branch `main` for now. :)
+Work in progress... Only on branch `main` for now. :)
